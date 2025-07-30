@@ -1,0 +1,51 @@
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+
+export default defineConfig({
+  plugins: [react()] as any,
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    css: true,
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'src/test/',
+        '**/*.d.ts',
+        '**/*.config.*',
+        'dist/',
+        '.next/',
+        'coverage/',
+      ],
+      thresholds: {
+        global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
+      },
+    },
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './'),
+      '@/components': resolve(__dirname, './components'),
+      '@/lib': resolve(__dirname, './lib'),
+      '@/app': resolve(__dirname, './app'),
+      '@/hooks': resolve(__dirname, './hooks'),
+      '@/types': resolve(__dirname, './types'),
+      '@/utils': resolve(__dirname, './utils'),
+    },
+  },
+}); 
