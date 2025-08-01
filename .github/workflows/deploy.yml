@@ -1,0 +1,210 @@
+name: Deploy PinkyTrust Platform
+
+on:
+  push:
+    branches: [main, production]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # Build and test shared resources
+  build-shared:
+    name: Build Shared Resources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install shared dependencies
+        run: |
+          cd shared
+          npm ci
+
+      - name: Build shared resources
+        run: |
+          cd shared
+          npm run build
+
+      - name: Upload shared build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-resources
+          path: shared/dist
+          retention-days: 1
+
+  # Deploy User App (PWA)
+  deploy-user-app:
+    name: Deploy User App
+    runs-on: ubuntu-latest
+    needs: build-shared
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Download shared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: shared-resources
+          path: shared/dist
+
+      - name: Install User App dependencies
+        run: |
+          cd user-app
+          npm ci
+
+      - name: Build User App
+        run: |
+          cd user-app
+          npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_USER_APP_PROJECT_ID }}
+          working-directory: user-app
+          vercel-args: '--prod'
+
+  # Deploy Municipal App
+  deploy-municipal-app:
+    name: Deploy Municipal App
+    runs-on: ubuntu-latest
+    needs: build-shared
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Download shared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: shared-resources
+          path: shared/dist
+
+      - name: Install Municipal App dependencies
+        run: |
+          cd municipal-app
+          npm ci
+
+      - name: Build Municipal App
+        run: |
+          cd municipal-app
+          npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_MUNICIPAL_APP_PROJECT_ID }}
+          working-directory: municipal-app
+          vercel-args: '--prod'
+
+  # Deploy Organiser App
+  deploy-organiser-app:
+    name: Deploy Organiser App
+    runs-on: ubuntu-latest
+    needs: build-shared
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Download shared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: shared-resources
+          path: shared/dist
+
+      - name: Install Organiser App dependencies
+        run: |
+          cd organiser-app
+          npm ci
+
+      - name: Build Organiser App
+        run: |
+          cd organiser-app
+          npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './organiser-app/dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_ORGANISER_SITE_ID }}
+
+  # Post-deployment verification
+  verify-deployments:
+    name: Verify Deployments
+    runs-on: ubuntu-latest
+    needs: [deploy-user-app, deploy-municipal-app, deploy-organiser-app]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+    steps:
+      - name: Verify User App
+        run: |
+          echo "Verifying User App deployment..."
+          # Add health check commands here
+          
+      - name: Verify Municipal App
+        run: |
+          echo "Verifying Municipal App deployment..."
+          # Add health check commands here
+          
+      - name: Verify Organiser App
+        run: |
+          echo "Verifying Organiser App deployment..."
+          # Add health check commands here
+
+      - name: Notify deployment success
+        run: |
+          echo "🎉 All applications deployed successfully!"
+          echo "✅ User App: PWA deployed"
+          echo "✅ Municipal App: Admin dashboard deployed"
+          echo "✅ Organiser App: Event management deployed" 

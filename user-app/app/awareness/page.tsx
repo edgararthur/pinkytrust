@@ -24,7 +24,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useAwarenessContent } from '@/lib/queries';
-import { formatRelativeTime } from '@/utils';
+import { formatDateTime } from '@/utils';
 
 interface LearningCategory {
   id: string;
@@ -32,7 +32,7 @@ interface LearningCategory {
   description: string;
   icon: any;
   color: string;
-  bgColor: string;
+  bgColor: string;  
   gradient: string;
   content: any[];
 }

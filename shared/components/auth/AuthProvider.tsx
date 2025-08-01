@@ -1,12 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '../../lib/supabase';
-import { User as DbUser } from '../../types/database';
+import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
+import type { User as DbUser } from '../../types/database';
 
 interface AuthContextType {
-  user: User | null;
+  user: SupabaseUser | null;
   userProfile: DbUser | null;
   session: Session | null;
   loading: boolean;
@@ -31,7 +31,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<DbUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
+  const signUp = async (email: string, password: string, userData: Partial<DbUser>) => {
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const updateProfile = async (updates: Partial<UserProfile>) => {
+  const updateProfile = async (updates: Partial<DbUser>) => {
     if (!user) return;
 
     try {

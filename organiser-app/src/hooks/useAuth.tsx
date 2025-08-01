@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
-import type { User, Organization } from '../types';
+import { User, Organization } from '../types';
 import toast from 'react-hot-toast';
 
 interface AuthContextType {
   user: User | null;
-  session: any | null;
+  session: Session | null;
   organization: Organization | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<any | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       if (session?.user) {
         await fetchUserProfile(session.user);
@@ -99,8 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('status', 'active')
         .single();
 
-      if (!orgError && orgMember && orgMember.organizations) {
-        setOrganization(orgMember.organizations as unknown as Organization);
+      if (!orgError && orgMember) {
+        setOrganization(orgMember.organizations as Organization);
       }
     } catch (error) {
       console.error('Error in fetchUserProfile:', error);
