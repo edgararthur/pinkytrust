@@ -107,27 +107,27 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 /**
- * Storage utilities
+ * Local storage utilities
  */
-export const storage = {
+export const localStorageUtils = {
   get: (key: string): string | null => {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem(key);
+    return window.localStorage.getItem(key);
   },
   
   set: (key: string, value: string): void => {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(key, value);
+    window.localStorage.setItem(key, value);
   },
   
   remove: (key: string): void => {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem(key);
+    window.localStorage.removeItem(key);
   },
   
   clear: (): void => {
     if (typeof window === 'undefined') return;
-    localStorage.clear();
+    window.localStorage.clear();
   }
 };
 
@@ -181,18 +181,18 @@ export const theme = {
     const html = document.documentElement;
     const isDark = html.classList.contains('dark');
     html.classList.toggle('dark', !isDark);
-    storage.set('theme', isDark ? 'light' : 'dark');
+    localStorageUtils.set('theme', isDark ? 'light' : 'dark');
   },
   
   set: (theme: 'light' | 'dark'): void => {
     if (typeof window === 'undefined') return;
     const html = document.documentElement;
     html.classList.toggle('dark', theme === 'dark');
-    storage.set('theme', theme);
+    localStorageUtils.set('theme', theme);
   },
   
   get: (): 'light' | 'dark' => {
     if (typeof window === 'undefined') return 'light';
-    return storage.get('theme') as 'light' | 'dark' || 'light';
+    return localStorageUtils.get('theme') as 'light' | 'dark' || 'light';
   }
 }; 
