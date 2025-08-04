@@ -344,6 +344,21 @@ export const eventsApi = {
     if (error) throw error;
     return data?.map(reg => reg.events).filter(Boolean) || [];
   },
+
+  updateEvent: async (id: string, updates: Partial<Event>): Promise<Event> => {
+    const { data, error } = await supabase
+      .from('events')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
 };
 
 export const assessmentApi = {
