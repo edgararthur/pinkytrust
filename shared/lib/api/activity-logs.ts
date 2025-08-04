@@ -254,7 +254,7 @@ export class ActivityLogsService {
 
       if (error) throw error;
 
-      return [...new Set(data.map(log => log.resource))];
+      return Array.from(new Set(data.map(log => log.resource)));
     } catch (error) {
       console.error('Error fetching unique resources:', error);
       throw new Error('Failed to fetch unique resources');
@@ -272,7 +272,7 @@ export class ActivityLogsService {
 
       if (error) throw error;
 
-      return [...new Set(data.map(log => log.action))];
+      return Array.from(new Set(data.map(log => log.action)));
     } catch (error) {
       console.error('Error fetching unique actions:', error);
       throw new Error('Failed to fetch unique actions');
