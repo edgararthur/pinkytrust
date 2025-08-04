@@ -1,6 +1,6 @@
 // Export main UI components that are working
 export { Alert } from './Alert';
-export { LoadingSpinner } from './LoadingSpinner';
+export { default as LoadingSpinner } from './LoadingSpinner';
 export { ImageCarousel } from './ImageCarousel';
 export { InteractiveCard } from './InteractiveCard';
 export { NotificationCenter } from './NotificationCenter';
