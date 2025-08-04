@@ -404,10 +404,19 @@ export const assessmentApi = {
         weight: q.weight,
         category: q.category as 'demographic' | 'family_history' | 'personal_history' | 'lifestyle' | 'symptoms' | 'concerns',
         helpText: q.help_text,
+        help_text: q.help_text,
+        image: q.image,
+        image_url: q.image_url,
         min: q.min_value,
         max: q.max_value,
         unit: q.unit,
         required: q.required,
+        supportiveMessage: q.supportive_message,
+        warningMessage: q.warning_message,
+        infoMessage: q.info_message,
+        confidencePrompt: q.confidence_prompt,
+        examples: q.examples,
+        relatedResources: q.related_resources,
       }));
 
       return questions;
