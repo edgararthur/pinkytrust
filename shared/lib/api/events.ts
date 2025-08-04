@@ -1,5 +1,5 @@
 // TODO: Fix import path for supabase client if necessary
-import { supabase } from '../supabase/client';
+import { supabase } from '../supabase';
 
 export interface Event {
   id: string;

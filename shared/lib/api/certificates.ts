@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client';
+import { supabase } from '../supabase';
 
 export interface Certificate {
   id: string;
