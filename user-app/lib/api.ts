@@ -345,6 +345,21 @@ export const eventsApi = {
     return data?.map(reg => reg.events).filter(Boolean) || [];
   },
 
+  createEvent: async (eventData: Omit<Event, 'id' | 'created_at' | 'updated_at'>): Promise<Event> => {
+    const { data, error } = await supabase
+      .from('events')
+      .insert({
+        ...eventData,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
   updateEvent: async (id: string, updates: Partial<Event>): Promise<Event> => {
     const { data, error } = await supabase
       .from('events')
