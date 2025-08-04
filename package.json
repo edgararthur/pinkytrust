@@ -1,20 +1,14 @@
 {
-  "name": "pinkytrust",
-  "version": "1.0.0",
-  "description": "A comprehensive, multi-application platform designed to support breast cancer awareness, early detection, and community engagement. The platform consists of three interconnected Next.js applications serving different user types and use cases.",
-  "main": "postcss.config.js",
+  "name": "pinkytrust-monorepo",
+  "private": true,
+  "workspaces": [
+    "user-app",
+    "shared",
+    "municipal-app",
+    "organiser-app"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.14",
-    "@radix-ui/react-select": "^2.2.5",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "date-fns": "^4.1.0",
-    "lucide-react": "^0.525.0",
-    "zustand": "^5.0.6"
+    "build": "npm run build --workspace=shared && npm run build --workspace=user-app",
+    "dev": "npm run dev --workspace=user-app"
   }
 }
