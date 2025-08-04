@@ -36,13 +36,29 @@ export type Event = z.infer<typeof EventSchema>;
 export const AssessmentQuestionSchema = z.object({
   id: z.string(),
   question: z.string(),
-  type: z.enum(['boolean', 'number', 'select', 'multiselect']),
+  subtitle: z.string().optional(),
+  type: z.enum(['boolean', 'number', 'select', 'multiselect', 'scale']),
   options: z.array(z.string()).optional(),
   weight: z.number().positive(),
-  category: z.enum(['demographic', 'family_history', 'personal_history', 'lifestyle', 'symptoms']),
+  category: z.enum(['demographic', 'family_history', 'personal_history', 'lifestyle', 'symptoms', 'concerns']),
+  helpText: z.string().optional(),
   help_text: z.string().optional(),
+  image: z.string().optional(),
   image_url: z.string().url().optional(),
   required: z.boolean().default(true),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  unit: z.string().optional(),
+  supportiveMessage: z.string().optional(),
+  warningMessage: z.string().optional(),
+  infoMessage: z.string().optional(),
+  confidencePrompt: z.string().optional(),
+  examples: z.array(z.string()).optional(),
+  relatedResources: z.array(z.object({
+    title: z.string(),
+    url: z.string(),
+    type: z.enum(['article', 'video', 'tool']),
+  })).optional(),
 });
 
 export type AssessmentQuestion = z.infer<typeof AssessmentQuestionSchema>;
