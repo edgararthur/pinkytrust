@@ -124,10 +124,16 @@ export interface ScanHistory {
 
 // Filter types
 export interface EventFilters {
-  date_range: 'today' | 'week' | 'month' | 'all';
-  distance: number;
-  event_type: 'all' | 'screening' | 'education' | 'support' | 'workshop';
+  date_range?: 'today' | 'week' | 'month' | 'all';
+  distance?: number;
+  event_type?: 'all' | 'screening' | 'education' | 'support' | 'workshop';
+  category?: string;
   location?: string;
+  date_from?: string;
+  date_to?: string;
+  search_query?: string;
+  limit?: number;
+  offset?: number;
 }
 
 export interface ContentFilters {
