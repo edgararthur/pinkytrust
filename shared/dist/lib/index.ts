@@ -1,1 +1,0 @@
-export { supabase, auth } from './supabase'; 
