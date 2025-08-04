@@ -43,7 +43,8 @@
     "build:components": "cp -r components dist/ && cp -r lib dist/ && cp -r utils dist/",
     "clean": "rm -rf dist",
     "dev": "tsc --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "postinstall": "ln -sf ../../node_modules/react node_modules/react && ln -sf ../../node_modules/react-dom node_modules/react-dom"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
