@@ -417,7 +417,7 @@ export const assessmentApi = {
         confidencePrompt: q.confidence_prompt,
         examples: q.examples,
         relatedResources: q.related_resources,
-      }));
+      })) as AssessmentQuestion[];
 
       return questions;
     } catch (error) {
