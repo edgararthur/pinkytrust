@@ -71,32 +71,7 @@ import {
 import AppLoadingScreen from '@/components/ui/AppLoadingScreen';
 import { useAssessmentQuestions, useUserAssessments } from '@/lib/queries';
 import { useDataManager } from '@/lib/data-manager';
-
-interface AssessmentQuestion {
-  id: string;
-  question: string;
-  subtitle?: string;
-  type: 'boolean' | 'number' | 'select' | 'multiselect' | 'scale';
-  options?: string[];
-  weight: number;
-  category: 'demographic' | 'family_history' | 'personal_history' | 'lifestyle' | 'symptoms' | 'concerns';
-  helpText?: string;
-  image?: string;
-  required?: boolean;
-  min?: number;
-  max?: number;
-  unit?: string;
-  supportiveMessage?: string;
-  warningMessage?: string;
-  infoMessage?: string;
-  confidencePrompt?: string;
-  examples?: string[];
-  relatedResources?: Array<{
-    title: string;
-    url: string;
-    type: 'article' | 'video' | 'tool';
-  }>;
-}
+import type { AssessmentQuestion } from '@/types';
 
 interface AssessmentAnswer {
   questionId: string;
