@@ -240,7 +240,7 @@ export default function AssessmentPage() {
       subtitle: 'Age is an important factor in health assessment',
       type: 'number' as const,
       weight: 2,
-      category: 'demographic',
+      category: 'demographic' as const,
       helpText: 'Age helps us provide personalized health recommendations based on your life stage.',
       min: 18,
       max: 100,
