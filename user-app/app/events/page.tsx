@@ -97,18 +97,8 @@ export default function EventsPage() {
 
         if (category.filter === 'nearby' && userLocation) {
           // Sort by distance if we have user location
-          filteredEvents = filteredEvents
-            .map(event => ({
-              ...event,
-              distance: calculateDistance(
-                userLocation.lat,
-                userLocation.lng,
-                event.coordinates?.lat || 0,
-                event.coordinates?.lng || 0
-              )
-            }))
-            .sort((a, b) => (a.distance || 0) - (b.distance || 0))
-            .slice(0, 10);
+          // For nearby events, just show the first 10 events since coordinates are not available
+          filteredEvents = filteredEvents.slice(0, 10);
         } else if (category.filter !== 'nearby') {
           // Filter by event type
           filteredEvents = filteredEvents
@@ -142,14 +132,8 @@ export default function EventsPage() {
   };
 
   const EventCard = ({ event }: { event: Event }) => {
-    const distance = userLocation && event.coordinates
-      ? calculateDistance(
-          userLocation.lat,
-          userLocation.lng,
-          event.coordinates.lat,
-          event.coordinates.lng
-        )
-      : null;
+    // Distance calculation is not available since events don't have coordinates
+    const distance = null;
 
     const isUpcoming = new Date(event.start_date) > new Date();
     const participantsLeft = event.max_participants 

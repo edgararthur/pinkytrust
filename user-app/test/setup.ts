@@ -38,7 +38,7 @@ beforeAll(() => {
   });
 
   // Mock scrollTo
-  window.scrollTo = vi.fn();
+  window.scrollTo = vi.fn() as any;
 
   // Mock localStorage
   const localStorageMock = {

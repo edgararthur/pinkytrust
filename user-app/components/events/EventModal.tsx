@@ -35,7 +35,7 @@ export function EventModal({ isOpen, onClose, event, onSuccess }: EventModalProp
   const [loading, setLoading] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
-    name: user?.name || '',
+    name: '',
     email: user?.email || '',
     phone: ''
   });

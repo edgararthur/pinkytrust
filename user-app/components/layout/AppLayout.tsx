@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAppStore } from '@/store';
 import { cn } from '@/utils';
 import { AuthProvider } from '@/components/auth/AuthProvider';
-import ThemeProvider from '@/components/layout/ThemeProvider';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import ErrorBoundary from '@/components/layout/ErrorBoundary';
 
 interface AppLayoutProps {
@@ -81,7 +81,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
           <AuthProvider>
             <div className={cn(
               'min-h-screen bg-gray-50 text-gray-900 transition-colors duration-200',

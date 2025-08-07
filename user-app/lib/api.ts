@@ -342,7 +342,7 @@ export const eventsApi = {
       .eq('user_id', userId);
     
     if (error) throw error;
-    return data?.map(reg => reg.events).filter(Boolean) || [];
+    return data?.map(reg => reg.events).filter(Boolean).flat() || [];
   },
 
   createEvent: async (eventData: Omit<Event, 'id' | 'created_at' | 'updated_at'>): Promise<Event> => {
@@ -599,9 +599,8 @@ export const awarenessApi = {
         query = query.or(`title.ilike.%${filters.search_query}%,description.ilike.%${filters.search_query}%`);
       }
 
-      if (filters?.limit) {
-        query = query.limit(filters.limit);
-      }
+      // Default limit to prevent too many results
+      query = query.limit(100);
 
       const { data, error } = await query;
 
@@ -763,7 +762,7 @@ export const syncApi = {
         assessmentApi.getUserAssessments(userId),
         communityApi.getPosts(50, 0),
         scannerApi.getScanHistory(userId),
-        awarenessApi.getContent({ user_id: userId })
+        awarenessApi.getContent()
       ]);
 
       return {

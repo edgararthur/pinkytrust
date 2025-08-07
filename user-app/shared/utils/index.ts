@@ -508,7 +508,7 @@ export const parseQueryString = (queryString: string): Record<string, any> => {
   const params = new URLSearchParams(queryString);
   const result: Record<string, any> = {};
   
-  for (const [key, value] of params.entries()) {
+  for (const [key, value] of Array.from(params.entries())) {
     if (result[key]) {
       if (Array.isArray(result[key])) {
         result[key].push(value);

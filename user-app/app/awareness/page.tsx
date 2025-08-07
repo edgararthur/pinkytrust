@@ -93,9 +93,7 @@ export default function AwarenessPage() {
     }
   ]);
 
-  const { data: contentData = [], isLoading: contentLoading } = useAwarenessContent({
-    limit: 100
-  });
+  const { data: contentData = [], isLoading: contentLoading } = useAwarenessContent();
 
   useEffect(() => {
     if (contentData.length > 0) {
@@ -103,7 +101,8 @@ export default function AwarenessPage() {
         let filteredContent = contentData;
 
         if (category.id === 'featured') {
-          filteredContent = filteredContent.filter(item => item.isFeatured).slice(0, 10);
+          // For featured content, show most liked items
+          filteredContent = filteredContent.sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 10);
         } else {
           filteredContent = filteredContent
             .filter(item => item.category === category.id)
@@ -236,7 +235,7 @@ export default function AwarenessPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold">
-                  {contentData.filter(c => c.isVerified).length}
+                  {contentData.length}
                 </div>
                 <div className="text-sm opacity-90">Verified</div>
               </div>

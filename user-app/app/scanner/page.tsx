@@ -205,7 +205,7 @@ export default function ScannerPage() {
     try {
       const track = streamRef.current.getVideoTracks()[0];
       await track.applyConstraints({
-        advanced: [{ torch: !flashlightOn }]
+        advanced: [{ torch: !flashlightOn } as any]
       });
       setFlashlightOn(!flashlightOn);
     } catch (err) {

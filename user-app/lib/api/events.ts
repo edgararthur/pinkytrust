@@ -15,6 +15,7 @@ export interface Event {
   organization_id: string;
   organization_name: string;
   status: 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'completed';
+  image_url?: string;
   created_at: string;
   updated_at: string;
 }

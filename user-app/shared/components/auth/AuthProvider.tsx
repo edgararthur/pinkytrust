@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, userData: Partial<UserProfile>) => {
+  const signUp = async (email: string, password: string, userData: Partial<DbUser>) => {
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const updateProfile = async (updates: Partial<UserProfile>) => {
+  const updateProfile = async (updates: Partial<DbUser>) => {
     if (!user) return;
 
     try {

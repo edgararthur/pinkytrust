@@ -128,8 +128,9 @@ export function ContentModal({ isOpen, onClose, mode, content, onSuccess }: Cont
         thumbnail_url: formData.thumbnail_url,
         tags: formData.tags,
         author_id: user!.id,
-        organization_id: user?.organization_id || null,
-        status: 'published'
+        organization_id: null,
+        status: 'published' as const,
+        is_featured: false
       };
 
       if (mode === 'add') {

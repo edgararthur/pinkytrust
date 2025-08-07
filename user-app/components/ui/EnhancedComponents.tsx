@@ -130,7 +130,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement, EnhancedButtonProps>
       }
     }
     
-    onClick?.(e);
+    onClick?.(e as React.MouseEvent<HTMLButtonElement>);
   };
 
   const variants = {

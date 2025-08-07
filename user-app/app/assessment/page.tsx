@@ -285,12 +285,12 @@ export default function AssessmentPage() {
         {
           title: 'Understanding Family History',
           url: '/resources/family-history',
-          type: 'article'
+          type: 'article' as const
         },
         {
           title: 'Genetic Counseling Information',
           url: '/resources/genetic-counseling',
-          type: 'video'
+          type: 'video' as const
         }
       ],
     },
@@ -443,7 +443,7 @@ export default function AssessmentPage() {
     }
   };
 
-  const validateAnswer = (question: AssessmentQuestion, answer: any): string | null => {
+  const validateAnswer = (question: any, answer: any): string | null => {
     if (question.required && (answer === null || answer === undefined || answer === '')) {
       return 'This question is required.';
     }
